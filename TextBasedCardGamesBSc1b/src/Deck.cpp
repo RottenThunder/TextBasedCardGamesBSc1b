@@ -50,3 +50,18 @@ void Deck::PlaceTop(Card card)
 {
 	m_Cards.insert(m_Cards.begin(), card);
 }
+
+size_t Deck::Size()
+{
+	return m_Cards.size();
+}
+
+Card& Deck::operator[](size_t index)
+{
+	return m_Cards[index];
+}
+
+const Card& Deck::operator[](size_t index) const
+{
+	return m_Cards[index];
+}

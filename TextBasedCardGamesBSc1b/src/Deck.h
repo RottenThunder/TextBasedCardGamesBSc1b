@@ -15,4 +15,9 @@ public:
 	Card Draw();
 	void PlaceBottom(Card card);
 	void PlaceTop(Card card);
+
+	size_t Size();
+
+	Card& operator[](size_t index);
+	const Card& operator[](size_t index) const;
 };
