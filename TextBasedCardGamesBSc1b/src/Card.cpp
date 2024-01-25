@@ -31,6 +31,7 @@ std::string Card::GetCardAsString()
 {
 	std::string output;
 
+	/*
 	switch (m_Number)
 	{
 	case 0:
@@ -101,6 +102,222 @@ std::string Card::GetCardAsString()
 		break;
 	default:
 		output.append("Unknown");
+		break;
+	}
+	*/
+
+	output = s_TemplateCard;
+
+	switch (m_Number)
+	{
+	case 0:
+		break;
+	case 1:
+		for (int i = 0; i < output.size(); i++)
+		{
+			if (output[i] == '0')
+				output[i] = 'A';
+			else if (output[i] == '1')
+				output[i] = ' ';
+			else if (output[i] == '2')
+				output[i] = 'A';
+			else if (output[i] == '3')
+				output[i] = ' ';
+		}
+		break;
+	case 2:
+		for (int i = 0; i < output.size(); i++)
+		{
+			if (output[i] == '0')
+				output[i] = '2';
+			else if (output[i] == '1')
+				output[i] = ' ';
+			else if (output[i] == '2')
+				output[i] = '2';
+			else if (output[i] == '3')
+				output[i] = ' ';
+		}
+		break;
+	case 3:
+		for (int i = 0; i < output.size(); i++)
+		{
+			if (output[i] == '0')
+				output[i] = '3';
+			else if (output[i] == '1')
+				output[i] = ' ';
+			else if (output[i] == '2')
+				output[i] = '3';
+			else if (output[i] == '3')
+				output[i] = ' ';
+		}
+		break;
+	case 4:
+		for (int i = 0; i < output.size(); i++)
+		{
+			if (output[i] == '0')
+				output[i] = '4';
+			else if (output[i] == '1')
+				output[i] = ' ';
+			else if (output[i] == '2')
+				output[i] = '4';
+			else if (output[i] == '3')
+				output[i] = ' ';
+		}
+		break;
+	case 5:
+		for (int i = 0; i < output.size(); i++)
+		{
+			if (output[i] == '0')
+				output[i] = '5';
+			else if (output[i] == '1')
+				output[i] = ' ';
+			else if (output[i] == '2')
+				output[i] = '5';
+			else if (output[i] == '3')
+				output[i] = ' ';
+		}
+		break;
+	case 6:
+		for (int i = 0; i < output.size(); i++)
+		{
+			if (output[i] == '0')
+				output[i] = '6';
+			else if (output[i] == '1')
+				output[i] = ' ';
+			else if (output[i] == '2')
+				output[i] = '6';
+			else if (output[i] == '3')
+				output[i] = ' ';
+		}
+		break;
+	case 7:
+		for (int i = 0; i < output.size(); i++)
+		{
+			if (output[i] == '0')
+				output[i] = '7';
+			else if (output[i] == '1')
+				output[i] = ' ';
+			else if (output[i] == '2')
+				output[i] = '7';
+			else if (output[i] == '3')
+				output[i] = ' ';
+		}
+		break;
+	case 8:
+		for (int i = 0; i < output.size(); i++)
+		{
+			if (output[i] == '0')
+				output[i] = '8';
+			else if (output[i] == '1')
+				output[i] = ' ';
+			else if (output[i] == '2')
+				output[i] = '8';
+			else if (output[i] == '3')
+				output[i] = ' ';
+		}
+		break;
+	case 9:
+		for (int i = 0; i < output.size(); i++)
+		{
+			if (output[i] == '0')
+				output[i] = '9';
+			else if (output[i] == '1')
+				output[i] = ' ';
+			else if (output[i] == '2')
+				output[i] = '9';
+			else if (output[i] == '3')
+				output[i] = ' ';
+		}
+		break;
+	case 10:
+		for (int i = 0; i < output.size(); i++)
+		{
+			if (output[i] == '0')
+				output[i] = '1';
+			else if (output[i] == '1')
+				output[i] = '0';
+			else if (output[i] == '2')
+				output[i] = '0';
+			else if (output[i] == '3')
+				output[i] = '1';
+		}
+		break;
+	case 11:
+		for (int i = 0; i < output.size(); i++)
+		{
+			if (output[i] == '0')
+				output[i] = 'J';
+			else if (output[i] == '1')
+				output[i] = ' ';
+			else if (output[i] == '2')
+				output[i] = 'J';
+			else if (output[i] == '3')
+				output[i] = ' ';
+		}
+		break;
+	case 12:
+		for (int i = 0; i < output.size(); i++)
+		{
+			if (output[i] == '0')
+				output[i] = 'Q';
+			else if (output[i] == '1')
+				output[i] = ' ';
+			else if (output[i] == '2')
+				output[i] = 'Q';
+			else if (output[i] == '3')
+				output[i] = ' ';
+		}
+		break;
+	case 13:
+		for (int i = 0; i < output.size(); i++)
+		{
+			if (output[i] == '0')
+				output[i] = 'K';
+			else if (output[i] == '1')
+				output[i] = ' ';
+			else if (output[i] == '2')
+				output[i] = 'K';
+			else if (output[i] == '3')
+				output[i] = ' ';
+		}
+		break;
+	default:
+		break;
+	}
+
+	switch (m_Suit)
+	{
+	case Suit::None:
+		break;
+	case Suit::Hearts:
+		for (int i = 0; i < output.size(); i++)
+		{
+			if (output[i] == 'N')
+				output[i] = '\3';
+		}
+		break;
+	case Suit::Diamonds:
+		for (int i = 0; i < output.size(); i++)
+		{
+			if (output[i] == 'N')
+				output[i] = '\4';
+		}
+		break;
+	case Suit::Clubs:
+		for (int i = 0; i < output.size(); i++)
+		{
+			if (output[i] == 'N')
+				output[i] = '\5';
+		}
+		break;
+	case Suit::Spades:
+		for (int i = 0; i < output.size(); i++)
+		{
+			if (output[i] == 'N')
+				output[i] = '\6';
+		}
+		break;
+	default:
 		break;
 	}
 

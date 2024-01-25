@@ -11,6 +11,15 @@ enum Suit : uint32_t
 	Spades = 4
 };
 
+static std::string s_TemplateCard = 
+R"(-------
+|01   |
+|     |
+|  N  |
+|     |
+|   32|
+-------)";
+
 class Card
 {
 private:

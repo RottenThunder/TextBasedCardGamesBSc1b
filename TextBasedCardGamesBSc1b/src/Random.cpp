@@ -16,3 +16,9 @@ uint64_t Random::GenerateRange64(uint64_t min, uint64_t max)
 	uint64_t value = s_UniformDistribution(s_Engine) % range;
 	return value + min;
 }
+
+bool Random::GeneratePercentageChance(uint64_t percentChanceToWin)
+{
+	uint64_t value = Random::GenerateRange64(100);
+	return value < percentChanceToWin;
+}

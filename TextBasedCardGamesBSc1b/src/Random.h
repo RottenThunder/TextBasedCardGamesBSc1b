@@ -15,4 +15,6 @@ public:
 	static uint64_t GenerateRange64(uint64_t exclusiveMax);
 	//Generates a random 64-bit number in the interval [min...max] with equal probabilities
 	static uint64_t GenerateRange64(uint64_t min, uint64_t max);
+	//Generates a bool based on percentChanceToWin
+	static bool GeneratePercentageChance(uint64_t percentChanceToWin);
 };
