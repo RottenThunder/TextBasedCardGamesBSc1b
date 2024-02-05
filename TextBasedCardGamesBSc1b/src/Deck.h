@@ -7,8 +7,9 @@ class Deck
 {
 private:
 	std::vector<Card> m_Cards;
+	bool m_IsInfinite = false;
 public:
-	Deck(bool isStandardDeck = false);
+	Deck(bool isStandardDeck = false, bool isInfinite = false);
 
 	void Shuffle();
 
