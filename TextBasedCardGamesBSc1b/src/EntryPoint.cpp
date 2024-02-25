@@ -3,13 +3,15 @@
 
 int main()
 {
+	_setmode(_fileno(stdout), _O_U16TEXT);
+
 	bool playing = true;
 	while (playing)
 	{
-		GetInput("Do you want to play Blackjack or Solitaire? (B/S)");
-		if (s_Input == "B")
+		GetInput(L"Do you want to play Blackjack or Solitaire? (B/S)");
+		if (s_Input == L"B")
 			Blackjack::PlayGame();
-		else if (s_Input == "S")
+		else if (s_Input == L"S")
 			Solitaire::PlayGame();
 		else
 		{
@@ -17,21 +19,21 @@ int main()
 			break;
 		}
 
-		while (s_Input != "Y" && s_Input != "N")
+		while (s_Input != L"Y" && s_Input != L"N")
 		{
-			GetInput("Do you want to continue playing? (Y/N)");
-			if (s_Input == "Y")
+			GetInput(L"Do you want to continue playing? (Y/N)");
+			if (s_Input == L"Y")
 				playing = true;
-			else if (s_Input == "N")
+			else if (s_Input == L"N")
 				playing = false;
 			else
 			{
-				std::cout << "ERROR: Please enter either Y or N" << std::endl;
+				std::wcout << L"ERROR: Please enter either Y or N" << std::endl;
 			}
 		}
 	}
 
-	GetInput("Press Enter To Quit");
+	GetInput(L"Press Enter To Quit");
 
 	s_Input.clear();
 	s_Input.shrink_to_fit();

@@ -4,7 +4,7 @@ void Blackjack::PlayGame()
 {
 	int AIPlayersAmount = 0;
 
-	GetInput("Enter the amount of AI Players to play against");
+	GetInput(L"Enter the amount of AI Players to play against");
 	AIPlayersAmount = std::stoi(s_Input);
 
 	Deck mainDeck(true, true);
@@ -29,21 +29,21 @@ void Blackjack::PlayGame()
 	while (!playerHasStanded && !playerHasGoneBust)
 	{
 		//Players Turn
-		std::cout << "\nYour Hand:\n";
+		std::wcout << L"\nYour Hand:\n";
 		for (size_t i = 0; i < playersDeck.Size(); i++)
-			std::cout << playersDeck[i].GetCardAsString() << std::endl;
+			std::wcout << playersDeck[i].GetCardAsString() << std::endl;
 
-		GetInput("Hit Or Stand? (H/S)");
-		while (s_Input != "H" && s_Input != "S")
+		GetInput(L"Hit Or Stand? (H/S)");
+		while (s_Input != L"H" && s_Input != L"S")
 		{
-			std::cout << "Invalid Input" << std::endl;
-			GetInput("Hit Or Stand? (H/S)");
+			std::wcout << L"Invalid Input" << std::endl;
+			GetInput(L"Hit Or Stand? (H/S)");
 		}
-		if (s_Input == "H")
+		if (s_Input == L"H")
 		{
 			//Hit
 			playersDeck.PlaceTop(mainDeck.Draw());
-			std::cout << "You Drawn\n" << playersDeck[0].GetCardAsString() << std::endl;
+			std::wcout << L"You Drawn\n" << playersDeck[0].GetCardAsString() << std::endl;
 
 			//See whether or not player has gone bust
 			uint32_t minPlayerValue = 0;
@@ -57,7 +57,7 @@ void Blackjack::PlayGame()
 			if (minPlayerValue > 21)
 			{
 				playerHasGoneBust = true;
-				std::cout << "You Have Gone Bust" << std::endl;
+				std::wcout << L"You Have Gone Bust" << std::endl;
 			}
 		}
 		else
@@ -69,29 +69,29 @@ void Blackjack::PlayGame()
 
 	//AIs Turns
 	for (size_t i = 0; i < AIDecks.size(); i++)
-		AIsHasGoneBust[i] = Blackjack::TakeAITurn("Player " + std::to_string(i + 2), AIDecks[i], mainDeck);
+		AIsHasGoneBust[i] = Blackjack::TakeAITurn(L"Player " + std::to_wstring(i + 2), AIDecks[i], mainDeck);
 
 	//Dealers Turns
 	dealersDeck.PlaceTop(mainDeck.Draw());
 	dealersDeck.PlaceTop(mainDeck.Draw());
-	dealerHasGoneBust = Blackjack::TakeAITurn("The Dealer", dealersDeck, mainDeck);
+	dealerHasGoneBust = Blackjack::TakeAITurn(L"The Dealer", dealersDeck, mainDeck);
 
 	//Figure out who has won
 	if (dealerHasGoneBust)
 	{
 		if (playerHasGoneBust)
-			std::cout << "You Have Lost" << std::endl;
+			std::wcout << L"You Have Lost" << std::endl;
 		else
-			std::cout << "You Have Won" << std::endl;
+			std::wcout << L"You Have Won" << std::endl;
 
 		for (size_t i = 0; i < AIDecks.size(); i++)
 		{
 			if (!AIsHasGoneBust[i])
 			{
-				std::cout << "Player " << i + 2 << " Have Won with a hand of:" << std::endl;
+				std::wcout << L"Player " << i + 2 << L" Have Won with a hand of:" << std::endl;
 				for (size_t j = 0; j < AIDecks[i].Size(); j++)
-					std::cout << AIDecks[i][j].GetCardAsString() << std::endl;
-				std::cout << std::endl;
+					std::wcout << AIDecks[i][j].GetCardAsString() << std::endl;
+				std::wcout << std::endl;
 			}
 		}
 	}
@@ -146,22 +146,22 @@ void Blackjack::PlayGame()
 		{
 			if (playersThatHaveHighestValue[i] == UINT64_MAX)
 			{
-				std::cout << "You Have Won" << std::endl;
+				std::wcout << L"You Have Won" << std::endl;
 			}
 			else
 			{
-				std::cout << "Player " << playersThatHaveHighestValue[i] + 2 << " Have Won with a hand of:" << std::endl;
+				std::wcout << L"Player " << playersThatHaveHighestValue[i] + 2 << L" Have Won with a hand of:" << std::endl;
 				for (size_t j = 0; j < AIDecks[playersThatHaveHighestValue[i]].Size(); j++)
-					std::cout << AIDecks[playersThatHaveHighestValue[i]][j].GetCardAsString() << std::endl;
-				std::cout << std::endl;
+					std::wcout << AIDecks[playersThatHaveHighestValue[i]][j].GetCardAsString() << std::endl;
+				std::wcout << std::endl;
 			}
 		}
 		if (playersThatHaveHighestValue.size() == 0)
 		{
-			std::cout << "The Dealer Has Won with a hand of:" << std::endl;
+			std::wcout << L"The Dealer Has Won with a hand of:" << std::endl;
 			for (size_t j = 0; j < dealersDeck.Size(); j++)
-				std::cout << dealersDeck[j].GetCardAsString() << std::endl;
-			std::cout << std::endl;
+				std::wcout << dealersDeck[j].GetCardAsString() << std::endl;
+			std::wcout << std::endl;
 		}
 	}
 }
@@ -201,7 +201,7 @@ uint32_t Blackjack::GetMaxValueOfHand(Deck& deck)
 	return value;
 }
 
-bool Blackjack::TakeAITurn(const std::string& AIName, Deck& deck, Deck& mainDeck)
+bool Blackjack::TakeAITurn(const std::wstring& AIName, Deck& deck, Deck& mainDeck)
 {
 	bool AIHasStanded = false;
 	bool AIHasGoneBust = false;
@@ -218,21 +218,21 @@ bool Blackjack::TakeAITurn(const std::string& AIName, Deck& deck, Deck& mainDeck
 		{
 			//Hit
 			deck.PlaceTop(mainDeck.Draw());
-			std::cout << AIName + " Has Hit" << std::endl;
+			std::wcout << AIName + L" Has Hit" << std::endl;
 
 			//See whether or not player has gone bust
 			uint32_t minAIValue = Blackjack::GetMinValueOfHand(deck);
 			if (minAIValue > 21)
 			{
 				AIHasGoneBust = true;
-				std::cout << AIName + " Have Gone Bust" << std::endl;
+				std::wcout << AIName + L" Have Gone Bust" << std::endl;
 			}
 		}
 		else
 		{
 			//Stand
 			AIHasStanded = true;
-			std::cout << AIName + " Has Standed" << std::endl;
+			std::wcout << AIName + L" Has Standed" << std::endl;
 		}
 	}
 	return AIHasGoneBust;

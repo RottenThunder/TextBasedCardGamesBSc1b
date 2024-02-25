@@ -11,8 +11,8 @@ enum Suit : uint32_t
 	Spades = 4
 };
 
-static std::string s_TemplateCard = 
-R"(-------
+static std::wstring s_TemplateCard = 
+LR"(-------
 |01   |
 |     |
 |  N  |
@@ -33,5 +33,5 @@ public:
 	void SetNumber(uint32_t number);
 	void SetSuit(Suit suit);
 
-	std::string GetCardAsString();
+	std::wstring GetCardAsString();
 };
