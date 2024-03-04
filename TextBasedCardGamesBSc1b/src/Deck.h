@@ -14,6 +14,7 @@ public:
 	void Shuffle();
 
 	Card Draw();
+	Card Draw(size_t index);
 	void PlaceBottom(Card card);
 	void PlaceTop(Card card);
 

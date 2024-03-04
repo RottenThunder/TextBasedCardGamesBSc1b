@@ -73,6 +73,13 @@ Card Deck::Draw()
 	return topCard;
 }
 
+Card Deck::Draw(size_t index)
+{
+	Card card = m_Cards[index];
+	m_Cards.erase(m_Cards.begin() + index);
+	return card;
+}
+
 void Deck::PlaceBottom(Card card)
 {
 	m_Cards.push_back(card);
