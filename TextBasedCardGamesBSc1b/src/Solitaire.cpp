@@ -24,9 +24,9 @@ void Solitaire::PlayGame()
 
 	//Take the kings out
 	int kingsTakenOut = 0;
+	size_t i = 0;
 	while (kingsTakenOut < 4)
 	{
-		size_t i = 0;
 		if (mainDeck[i].GetNumber() == 13)
 		{
 			mainDeck.Draw(i);
@@ -41,13 +41,100 @@ void Solitaire::PlayGame()
 	for (int i = 0; i < 5; i++)
 		Piles[i].PlaceTop(mainDeck.Draw());
 
-	bool hasAValidAction = true;
+	//Figure out whether there is a pair
+
+	std::vector<Card> availableCards;
+	availableCards.resize(5);
+	availableCards[0] = Piles[0][0];
+	availableCards[1] = Piles[1][0];
+	availableCards[2] = Piles[2][0];
+	availableCards[3] = Piles[3][0];
+	availableCards[4] = Piles[4][0];
+
+	//Illustrate cards
+
+	std::wstring availableCardsAsString = CombineCardsAsString(availableCards[0].GetCardAsString(), availableCards[1].GetCardAsString());
+	availableCardsAsString = CombineCardsAsString(availableCardsAsString, availableCards[2].GetCardAsString());
+	availableCardsAsString = CombineCardsAsString(availableCardsAsString, availableCards[3].GetCardAsString());
+	availableCardsAsString = CombineCardsAsString(availableCardsAsString, availableCards[4].GetCardAsString());
+	std::wcout << availableCardsAsString.c_str() << std::endl;
+
+	//Keep the play loop going unless there is no available actions such as drawing or discarding
+
+	bool hasAValidAction = HasAValidPair(availableCards) || mainDeck.Size() != 0;
 
 	while (hasAValidAction)
 	{
 		//Play Loop
 
-		//Figure out whether there is a pair
+		//Prompt player to choose which 2 columns (1-5) they think are a pair and also give them the prompt to draw 5 new cards
+
+		size_t firstColumn = UINT64_MAX;
+		size_t secondColumn = UINT64_MAX;
+		while (firstColumn == secondColumn)
+		{
+			firstColumn = UINT64_MAX;
+			secondColumn = UINT64_MAX;
+			while (firstColumn == UINT64_MAX)
+			{
+				GetInput(L"Choose First Column (1-5) (6 to draw 5 new cards): ");
+				if (s_Input == L"1")
+					firstColumn = 0;
+				else if (s_Input == L"2")
+					firstColumn = 1;
+				else if (s_Input == L"3")
+					firstColumn = 2;
+				else if (s_Input == L"4")
+					firstColumn = 3;
+				else if (s_Input == L"5")
+					firstColumn = 4;
+				else if (s_Input == L"6")
+					firstColumn = 5;
+				else
+					std::wcout << L"Invalid Input" << std::endl;
+			}
+			while (secondColumn == UINT64_MAX && firstColumn != 5)
+			{
+				GetInput(L"Choose Second Column (1-5): ");
+				if (s_Input == L"1")
+					secondColumn = 0;
+				else if (s_Input == L"2")
+					secondColumn = 1;
+				else if (s_Input == L"3")
+					secondColumn = 2;
+				else if (s_Input == L"4")
+					secondColumn = 3;
+				else if (s_Input == L"5")
+					secondColumn = 4;
+				else
+					std::wcout << L"Invalid Input" << std::endl;
+			}
+			if (firstColumn == secondColumn)
+				std::wcout << L"You can not specify the same column twice" << std::endl;
+		}
+
+		//Verify the pair is correct
+
+		if (firstColumn == 5)
+		{
+			for (int i = 0; i < 5; i++)
+				Piles[i].PlaceTop(mainDeck.Draw());
+		}
+		else
+		{
+			if (availableCards[firstColumn].GetNumber() + availableCards[secondColumn].GetNumber() == 13)
+			{
+				Piles[firstColumn].Draw();
+				Piles[secondColumn].Draw();
+				std::wcout << "The valid pair has been discarded" << std::endl;
+			}
+			else
+			{
+				std::wcout << "That is not a vaild pair" << std::endl;
+			}
+		}
+
+		//Figure out whether there is a pair (TODO: Check whether there is a card in that pile)
 
 		std::vector<Card> availableCards;
 		availableCards.resize(5);
@@ -57,21 +144,58 @@ void Solitaire::PlayGame()
 		availableCards[3] = Piles[3][0];
 		availableCards[4] = Piles[4][0];
 
-		if (!HasAValidPair(availableCards))
-			break;
+		//Illustrate cards (TODO: illustrat cards on top of each other)
 
-		//TODO: Keep the play loop going unless there is no available actions such as drawing or discarding
+		std::wstring availableCardsAsString = CombineCardsAsString(availableCards[0].GetCardAsString(), availableCards[1].GetCardAsString());
+		availableCardsAsString = CombineCardsAsString(availableCardsAsString, availableCards[2].GetCardAsString());
+		availableCardsAsString = CombineCardsAsString(availableCardsAsString, availableCards[3].GetCardAsString());
+		availableCardsAsString = CombineCardsAsString(availableCardsAsString, availableCards[4].GetCardAsString());
+		std::wcout << availableCardsAsString.c_str() << std::endl;
 
-		//TODO: When ever the player pushes a certain key they will draw another 5 cards
+		//Keep the play loop going unless there is no available actions such as drawing or discarding
 
-		//TODO: Illustrate cards
-
-		//TODO: Prompt player to choose which 2 columns (A-E) they think are a pair
-
-		//TODO: Verify the pair is correct
+		hasAValidAction = HasAValidPair(availableCards) || mainDeck.Size() != 0;
 	}
 
-	//TODO: Figure out wether the player has won
+	//TODO: Figure out whether the player has won
+}
+
+std::wstring Solitaire::CombineCardsAsString(const std::wstring& card1, const std::wstring& card2)
+{
+	std::wstring output = card1;
+
+	size_t i = 0, j = 0, k = 0;
+	std::wstring insertion;
+	for (; i < 7; i++)
+	{
+		if (i == 6)
+		{
+			while (j < card2.size())
+			{
+				insertion.push_back(card2[j]);
+				j++;
+			}
+			j++;
+			while (k < output.size())
+				k++;
+		}
+		else
+		{
+			while (card2[j] != L'\n')
+			{
+				insertion.push_back(card2[j]);
+				j++;
+			}
+			j++;
+			while (output[k] != L'\n')
+				k++;
+		}
+		output.insert(k, insertion);
+		k += insertion.size() + 1;
+		insertion.clear();
+	}
+
+	return output;
 }
 
 bool Solitaire::HasAValidPair(std::vector<Card>& piles)
