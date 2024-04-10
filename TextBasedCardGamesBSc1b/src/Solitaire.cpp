@@ -4,9 +4,9 @@ void Solitaire::PlayGame()
 {
 	GetInput(LR"(Baroness Solitaire
 
-		Rules: Five cards are dealt in a row as the bases of the five piles in the tableau. The top cards of each pile are available for removal to the discard pile.
+		Rules: All Kings are taken out of the deck. Five cards are dealt in a row as the bases of the five piles in the tableau. The top cards of each pile are available for removal to the discard pile.
 
-		The aim is to discard all the cards by removing any Kings and pairs of available cards that total 13. In this game, spot cards are taken at face value, Jacks are worth 11, Queens 12, and Kings 13. So the following combinations of cards may be discarded:
+		The aim is to discard all the cards by removing any pairs of available cards that total 13. In this game, spot cards are taken at face value, Jacks are worth 11, Queens 12. So the following combinations of cards may be discarded:
 
 		Queen and Ace
 		Jack and 2
@@ -14,8 +14,7 @@ void Solitaire::PlayGame()
 		9 and 4
 		8 and 5
 		7 and 6
-		Kings on their own.
-		When all available discards have been made, five fresh cards are dealt, one onto each pile in the tableau either filling a space or covering the existing card.The new top cards are available for play and, once again, any Kings or combinations totalling 13 are moved to the discard pile.When the top card of a pile is discarded, the card beneath becomes immediately available.Play continues in this way until there are only two cards left in hand; these are used as grace cards, being added to the end of the tableau, face up and side by side, and are available for play.
+		When all available discards have been made, five fresh cards are dealt, one onto each pile in the tableau either filling a space or covering the existing card. The new top cards are available for play and, once again, any combinations totalling 13 are moved to the discard pile. When the top card of a pile is discarded, the card beneath becomes immediately available. Play continues in this way until there are only three cards left in hand; these are used as grace cards, being added to the end of the tableau, face up and side by side, and are available for play.
 
 		The game is out when all cards have been discarded.)");
 
@@ -136,15 +135,13 @@ void Solitaire::PlayGame()
 
 		//Figure out whether there is a pair (TODO: Check whether there is a card in that pile)
 
-		std::vector<Card> availableCards;
-		availableCards.resize(5);
 		availableCards[0] = Piles[0][0];
 		availableCards[1] = Piles[1][0];
 		availableCards[2] = Piles[2][0];
 		availableCards[3] = Piles[3][0];
 		availableCards[4] = Piles[4][0];
 
-		//Illustrate cards (TODO: illustrat cards on top of each other)
+		//Illustrate cards (TODO: illustrate cards on top of each other)
 
 		std::wstring availableCardsAsString = CombineCardsAsString(availableCards[0].GetCardAsString(), availableCards[1].GetCardAsString());
 		availableCardsAsString = CombineCardsAsString(availableCardsAsString, availableCards[2].GetCardAsString());
@@ -193,6 +190,129 @@ std::wstring Solitaire::CombineCardsAsString(const std::wstring& card1, const st
 		output.insert(k, insertion);
 		k += insertion.size() + 1;
 		insertion.clear();
+	}
+
+	return output;
+}
+
+std::wstring Solitaire::LayoutDeckAsString(Deck& deck)
+{
+	std::wstring output;
+
+	for (size_t i = 0; i < deck.Size(); i++)
+	{
+		size_t j = deck.Size() - i - 1;
+
+		if (j == deck.Size() - 1)
+			output.append(deck[j].GetCardAsString());
+		else
+		{
+			std::wstring card = deck[j].GetCardAsString();
+			size_t replaceIndex = i * 16;
+			size_t k = 0;
+			for (; k < 39; k++)
+			{
+				output[replaceIndex] = card[k];
+				replaceIndex++;
+			}
+			for (; k < 56; k++)
+			{
+				output.push_back(card[k]);
+			}
+		}
+	}
+
+	return output;
+}
+
+std::wstring Solitaire::AppendStringsOnSamePrintLine(const std::wstring& string1, const std::wstring& string2)
+{
+	std::wstring output = string1;
+
+	size_t string1Lines = 1;
+	size_t string1MostCharactersOnLine = 0;
+	size_t string1LastLineCharactersCount = 0;
+	for (size_t i = 0; i < string1.size(); i++)
+	{
+		if (string1[i] == L'\n')
+		{
+			string1Lines++;
+
+			if (string1LastLineCharactersCount > string1MostCharactersOnLine)
+				string1MostCharactersOnLine = string1LastLineCharactersCount;
+
+			string1LastLineCharactersCount = 0;
+		}
+		else
+			string1LastLineCharactersCount++;
+	}
+	if (string1.size() == 0)
+		string1Lines = 0;
+
+	size_t string2Lines = 1;
+	for (size_t i = 0; i < string2.size(); i++)
+	{
+		if (string2[i] == L'\n')
+			string2Lines++;
+	}
+	if (string2.size() == 0)
+		string2Lines = 0;
+
+	if (string2Lines > string1Lines)
+	{
+		output.append(string2Lines - string1Lines, L'\n');
+		string1Lines = string2Lines;
+	}
+
+	for (size_t i = 0; i < string1Lines; i++)
+	{
+		for (size_t j = 0; j < string1MostCharactersOnLine; j++)
+		{
+			size_t index = (i * string1MostCharactersOnLine) + i + j;
+			if (index >= output.size())
+				output.append(1, L' ');
+			else if (output[index] == L'\n')
+				output.insert(index, 1, L' ');
+		}
+	}
+
+	size_t indexOfString1 = 0;
+	size_t indexOfString2 = 0;
+	for (size_t i = 0; i < string2Lines; i++)
+	{
+		bool foundNewLineCharacter = false;
+
+		//Find the index in the first string to insert
+		while (indexOfString1 < output.size())
+		{
+			if (output[indexOfString1] == L'\n')
+			{
+				foundNewLineCharacter = true;
+				output.erase(indexOfString1, 1);
+				break;
+			}
+			indexOfString1++;
+		}
+
+		//Insert characters in second string up until the end or until a new line character
+		while (indexOfString2 < string2.size())
+		{
+			if (string2[indexOfString2] == L'\n')
+			{
+				foundNewLineCharacter = true;
+				indexOfString2++;
+				break;
+			}
+			output.insert(indexOfString1, 1, string2[indexOfString2]);
+			indexOfString1++;
+			indexOfString2++;
+		}
+
+		if (foundNewLineCharacter)
+		{
+			output.insert(indexOfString1, 1, L'\n');
+			indexOfString1++;
+		}
 	}
 
 	return output;
