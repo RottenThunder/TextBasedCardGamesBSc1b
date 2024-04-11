@@ -90,6 +90,22 @@ void Deck::PlaceTop(Card card)
 	m_Cards.insert(m_Cards.begin(), card);
 }
 
+Card Deck::PeekTop()
+{
+	if (m_Cards.size() == 0)
+		return Card();
+	else
+		return m_Cards.front();
+}
+
+Card Deck::PeekBottom()
+{
+	if (m_Cards.size() == 0)
+		return Card();
+	else
+		return m_Cards.back();
+}
+
 size_t Deck::Size()
 {
 	return m_Cards.size();

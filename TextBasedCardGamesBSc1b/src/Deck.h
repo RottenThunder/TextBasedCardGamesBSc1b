@@ -18,6 +18,9 @@ public:
 	void PlaceBottom(Card card);
 	void PlaceTop(Card card);
 
+	Card PeekTop();
+	Card PeekBottom();
+
 	size_t Size();
 
 	Card& operator[](size_t index);

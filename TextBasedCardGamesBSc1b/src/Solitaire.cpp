@@ -44,11 +44,11 @@ void Solitaire::PlayGame()
 
 	std::vector<Card> availableCards;
 	availableCards.resize(5);
-	availableCards[0] = Piles[0][0];
-	availableCards[1] = Piles[1][0];
-	availableCards[2] = Piles[2][0];
-	availableCards[3] = Piles[3][0];
-	availableCards[4] = Piles[4][0];
+	availableCards[0] = Piles[0].PeekTop();
+	availableCards[1] = Piles[1].PeekTop();
+	availableCards[2] = Piles[2].PeekTop();
+	availableCards[3] = Piles[3].PeekTop();
+	availableCards[4] = Piles[4].PeekTop();
 
 	//Illustrate cards
 
@@ -65,6 +65,8 @@ void Solitaire::PlayGame()
 	while (hasAValidAction)
 	{
 		//Play Loop
+
+		std::wcout << L"Cards Left In Deck: " << mainDeck.Size() << std::endl;
 
 		//Prompt player to choose which 2 columns (1-5) they think are a pair and also give them the prompt to draw 5 new cards
 
@@ -117,7 +119,11 @@ void Solitaire::PlayGame()
 		if (firstColumn == 5)
 		{
 			for (int i = 0; i < 5; i++)
-				Piles[i].PlaceTop(mainDeck.Draw());
+			{
+				Card card = mainDeck.Draw();
+				if (card.GetNumber() != 0)
+					Piles[i].PlaceTop(card);
+			}
 		}
 		else
 		{
@@ -125,21 +131,21 @@ void Solitaire::PlayGame()
 			{
 				Piles[firstColumn].Draw();
 				Piles[secondColumn].Draw();
-				std::wcout << "The valid pair has been discarded" << std::endl;
+				std::wcout << L"The valid pair has been discarded" << std::endl;
 			}
 			else
 			{
-				std::wcout << "That is not a vaild pair" << std::endl;
+				std::wcout << L"That is not a vaild pair" << std::endl;
 			}
 		}
 
-		//Figure out whether there is a pair (TODO: Check whether there is a card in that pile)
+		//Figure out whether there is a pair
 
-		availableCards[0] = Piles[0][0];
-		availableCards[1] = Piles[1][0];
-		availableCards[2] = Piles[2][0];
-		availableCards[3] = Piles[3][0];
-		availableCards[4] = Piles[4][0];
+		availableCards[0] = Piles[0].PeekTop();
+		availableCards[1] = Piles[1].PeekTop();
+		availableCards[2] = Piles[2].PeekTop();
+		availableCards[3] = Piles[3].PeekTop();
+		availableCards[4] = Piles[4].PeekTop();
 
 		//Illustrate cards
 
@@ -154,7 +160,12 @@ void Solitaire::PlayGame()
 		hasAValidAction = HasAValidPair(availableCards) || mainDeck.Size() != 0;
 	}
 
-	//TODO: Figure out whether the player has won
+	//Figure out whether the player has won
+	
+	if (availableCards[0].GetNumber() == 0 && availableCards[1].GetNumber() == 0 && availableCards[2].GetNumber() == 0 && availableCards[3].GetNumber() == 0 && availableCards[4].GetNumber() == 0)
+		std::wcout << L"You have WON the game because you have no more available moves and there is no more cards on the table" << std::endl;
+	else
+		std::wcout << L"You have LOST the game because you have no more available moves and there is still cards on the table" << std::endl;
 }
 
 std::wstring Solitaire::LayoutDeckAsString(Deck& deck)
@@ -165,7 +176,9 @@ std::wstring Solitaire::LayoutDeckAsString(Deck& deck)
 	{
 		size_t j = deck.Size() - i - 1;
 
-		if (j == deck.Size() - 1)
+		if (deck[j].GetNumber() == 0)
+			continue;
+		else if (j == deck.Size() - 1)
 			output.append(deck[j].GetCardAsString());
 		else
 		{
@@ -184,7 +197,16 @@ std::wstring Solitaire::LayoutDeckAsString(Deck& deck)
 		}
 	}
 
-	//output.erase(std::remove(output.begin(), output.end(), L'\0'), output.end());
+	if (deck.Size() == 0)
+	{
+		Card dummyCard;
+		output = dummyCard.GetCardAsString();
+		for (size_t i = 0; i < output.size(); i++)
+		{
+			if (output[i] != L'\n')
+				output[i] = L' ';
+		}
+	}
 
 	return output;
 }
