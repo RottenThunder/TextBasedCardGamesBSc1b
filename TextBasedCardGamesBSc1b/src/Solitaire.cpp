@@ -52,11 +52,11 @@ void Solitaire::PlayGame()
 
 	//Illustrate cards
 
-	std::wstring availableCardsAsString = CombineCardsAsString(availableCards[0].GetCardAsString(), availableCards[1].GetCardAsString());
-	availableCardsAsString = CombineCardsAsString(availableCardsAsString, availableCards[2].GetCardAsString());
-	availableCardsAsString = CombineCardsAsString(availableCardsAsString, availableCards[3].GetCardAsString());
-	availableCardsAsString = CombineCardsAsString(availableCardsAsString, availableCards[4].GetCardAsString());
-	std::wcout << availableCardsAsString.c_str() << std::endl;
+	std::wstring decksAsString = AppendStringsOnSamePrintLine(LayoutDeckAsString(Piles[0]), LayoutDeckAsString(Piles[1]));
+	decksAsString = AppendStringsOnSamePrintLine(decksAsString, LayoutDeckAsString(Piles[2]));
+	decksAsString = AppendStringsOnSamePrintLine(decksAsString, LayoutDeckAsString(Piles[3]));
+	decksAsString = AppendStringsOnSamePrintLine(decksAsString, LayoutDeckAsString(Piles[4]));
+	std::wcout << decksAsString << std::endl;
 
 	//Keep the play loop going unless there is no available actions such as drawing or discarding
 
@@ -141,13 +141,13 @@ void Solitaire::PlayGame()
 		availableCards[3] = Piles[3][0];
 		availableCards[4] = Piles[4][0];
 
-		//Illustrate cards (TODO: illustrate cards on top of each other)
+		//Illustrate cards
 
-		std::wstring availableCardsAsString = CombineCardsAsString(availableCards[0].GetCardAsString(), availableCards[1].GetCardAsString());
-		availableCardsAsString = CombineCardsAsString(availableCardsAsString, availableCards[2].GetCardAsString());
-		availableCardsAsString = CombineCardsAsString(availableCardsAsString, availableCards[3].GetCardAsString());
-		availableCardsAsString = CombineCardsAsString(availableCardsAsString, availableCards[4].GetCardAsString());
-		std::wcout << availableCardsAsString.c_str() << std::endl;
+		decksAsString = AppendStringsOnSamePrintLine(LayoutDeckAsString(Piles[0]), LayoutDeckAsString(Piles[1]));
+		decksAsString = AppendStringsOnSamePrintLine(decksAsString, LayoutDeckAsString(Piles[2]));
+		decksAsString = AppendStringsOnSamePrintLine(decksAsString, LayoutDeckAsString(Piles[3]));
+		decksAsString = AppendStringsOnSamePrintLine(decksAsString, LayoutDeckAsString(Piles[4]));
+		std::wcout << decksAsString << std::endl;
 
 		//Keep the play loop going unless there is no available actions such as drawing or discarding
 
@@ -155,44 +155,6 @@ void Solitaire::PlayGame()
 	}
 
 	//TODO: Figure out whether the player has won
-}
-
-std::wstring Solitaire::CombineCardsAsString(const std::wstring& card1, const std::wstring& card2)
-{
-	std::wstring output = card1;
-
-	size_t i = 0, j = 0, k = 0;
-	std::wstring insertion;
-	for (; i < 7; i++)
-	{
-		if (i == 6)
-		{
-			while (j < card2.size())
-			{
-				insertion.push_back(card2[j]);
-				j++;
-			}
-			j++;
-			while (k < output.size())
-				k++;
-		}
-		else
-		{
-			while (card2[j] != L'\n')
-			{
-				insertion.push_back(card2[j]);
-				j++;
-			}
-			j++;
-			while (output[k] != L'\n')
-				k++;
-		}
-		output.insert(k, insertion);
-		k += insertion.size() + 1;
-		insertion.clear();
-	}
-
-	return output;
 }
 
 std::wstring Solitaire::LayoutDeckAsString(Deck& deck)
@@ -215,12 +177,14 @@ std::wstring Solitaire::LayoutDeckAsString(Deck& deck)
 				output[replaceIndex] = card[k];
 				replaceIndex++;
 			}
-			for (; k < 56; k++)
+			for (; k < 55; k++)
 			{
 				output.push_back(card[k]);
 			}
 		}
 	}
+
+	//output.erase(std::remove(output.begin(), output.end(), L'\0'), output.end());
 
 	return output;
 }
