@@ -3,7 +3,7 @@
 
 int main()
 {
-	_setmode(_fileno(stdout), _O_U16TEXT);
+	_setmode(_fileno(stdout), _O_U16TEXT); //This is required to make the console output unicode characters
 
 	bool playing = true;
 	while (playing)

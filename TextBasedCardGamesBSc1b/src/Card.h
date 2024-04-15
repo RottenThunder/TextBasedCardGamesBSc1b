@@ -13,11 +13,11 @@ enum Suit : uint32_t
 
 static std::wstring s_TemplateCard = 
 LR"(-------
-|01   |
+|BC   |
 |     |
 |  N  |
 |     |
-|   32|
+|   ED|
 -------)";
 
 class Card

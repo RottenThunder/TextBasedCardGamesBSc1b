@@ -1,10 +1,28 @@
 #include "Blackjack.h"
+#include <cwctype>
 
 void Blackjack::PlayGame()
 {
 	int AIPlayersAmount = 0;
 
-	GetInput(L"Enter the amount of AI Players to play against");
+	bool validInput = false;
+
+	while (!validInput)
+	{
+		GetInput(L"Enter the amount of AI Players to play against");
+
+		for (size_t i = 0; i < s_Input.size(); i++)
+		{
+			validInput = true;
+			if (!std::iswdigit(s_Input[i]))
+			{
+				validInput = false;
+				std::wcout << "Invalid Input" << std::endl;
+				i = s_Input.size();
+			}
+		}
+	}
+
 	AIPlayersAmount = std::stoi(s_Input);
 
 	Deck mainDeck(true, true);
@@ -30,8 +48,10 @@ void Blackjack::PlayGame()
 	{
 		//Players Turn
 		std::wcout << L"\nYour Hand:\n";
+		std::wstring cardDeckAsString;
 		for (size_t i = 0; i < playersDeck.Size(); i++)
-			std::wcout << playersDeck[i].GetCardAsString() << std::endl;
+			cardDeckAsString = AppendStringsOnSamePrintLine(cardDeckAsString, playersDeck[i].GetCardAsString());
+		std::wcout << cardDeckAsString << std::endl;
 
 		GetInput(L"Hit Or Stand? (H/S)");
 		while (s_Input != L"H" && s_Input != L"S")
@@ -89,8 +109,10 @@ void Blackjack::PlayGame()
 			if (!AIsHasGoneBust[i])
 			{
 				std::wcout << L"Player " << i + 2 << L" Have Won with a hand of:" << std::endl;
+				std::wstring cardDeckAsString;
 				for (size_t j = 0; j < AIDecks[i].Size(); j++)
-					std::wcout << AIDecks[i][j].GetCardAsString() << std::endl;
+					cardDeckAsString = AppendStringsOnSamePrintLine(cardDeckAsString, AIDecks[i][j].GetCardAsString());
+				std::wcout << cardDeckAsString << std::endl;
 				std::wcout << std::endl;
 			}
 		}
@@ -146,21 +168,30 @@ void Blackjack::PlayGame()
 		{
 			if (playersThatHaveHighestValue[i] == UINT64_MAX)
 			{
-				std::wcout << L"You Have Won" << std::endl;
+				std::wcout << L"You Have Won with a hand of: " << std::endl;
+				std::wstring cardDeckAsString;
+				for (size_t i = 0; i < playersDeck.Size(); i++)
+					cardDeckAsString = AppendStringsOnSamePrintLine(cardDeckAsString, playersDeck[i].GetCardAsString());
+				std::wcout << cardDeckAsString << std::endl;
+				std::wcout << std::endl;
 			}
 			else
 			{
 				std::wcout << L"Player " << playersThatHaveHighestValue[i] + 2 << L" Have Won with a hand of:" << std::endl;
+				std::wstring cardDeckAsString;
 				for (size_t j = 0; j < AIDecks[playersThatHaveHighestValue[i]].Size(); j++)
-					std::wcout << AIDecks[playersThatHaveHighestValue[i]][j].GetCardAsString() << std::endl;
+					cardDeckAsString = AppendStringsOnSamePrintLine(cardDeckAsString, AIDecks[playersThatHaveHighestValue[i]][j].GetCardAsString());
+				std::wcout << cardDeckAsString << std::endl;
 				std::wcout << std::endl;
 			}
 		}
 		if (playersThatHaveHighestValue.size() == 0)
 		{
 			std::wcout << L"The Dealer Has Won with a hand of:" << std::endl;
+			std::wstring cardDeckAsString;
 			for (size_t j = 0; j < dealersDeck.Size(); j++)
-				std::wcout << dealersDeck[j].GetCardAsString() << std::endl;
+				cardDeckAsString = AppendStringsOnSamePrintLine(cardDeckAsString, dealersDeck[j].GetCardAsString());
+			std::wcout << cardDeckAsString << std::endl;
 			std::wcout << std::endl;
 		}
 	}
@@ -236,4 +267,107 @@ bool Blackjack::TakeAITurn(const std::wstring& AIName, Deck& deck, Deck& mainDec
 		}
 	}
 	return AIHasGoneBust;
+}
+
+std::wstring Blackjack::AppendStringsOnSamePrintLine(const std::wstring& string1, const std::wstring& string2)
+{
+	std::wstring output = string1;
+
+	//Found out the amount of lines and the most amount of characters on 1 line in the first string
+
+	size_t string1Lines = 1;
+	size_t string1MostCharactersOnLine = 0;
+	size_t string1LastLineCharactersCount = 0;
+	for (size_t i = 0; i < string1.size(); i++)
+	{
+		if (string1[i] == L'\n')
+		{
+			string1Lines++;
+
+			if (string1LastLineCharactersCount > string1MostCharactersOnLine)
+				string1MostCharactersOnLine = string1LastLineCharactersCount;
+
+			string1LastLineCharactersCount = 0;
+		}
+		else
+			string1LastLineCharactersCount++;
+	}
+	if (string1.size() == 0)
+		string1Lines = 0;
+
+	//Found out the amount of lines in the second string
+
+	size_t string2Lines = 1;
+	for (size_t i = 0; i < string2.size(); i++)
+	{
+		if (string2[i] == L'\n')
+			string2Lines++;
+	}
+	if (string2.size() == 0)
+		string2Lines = 0;
+
+	//Add extra lines to the first string if the second string has more lines
+
+	if (string2Lines > string1Lines)
+	{
+		output.append(string2Lines - string1Lines, L'\n');
+		string1Lines = string2Lines;
+	}
+
+	//Add extra spaces to the end of lines in the first string to make each line have the same amount of characters 
+
+	for (size_t i = 0; i < string1Lines; i++)
+	{
+		for (size_t j = 0; j < string1MostCharactersOnLine; j++)
+		{
+			size_t index = (i * string1MostCharactersOnLine) + i + j;
+			if (index >= output.size())
+				output.append(1, L' ');
+			else if (output[index] == L'\n')
+				output.insert(index, 1, L' ');
+		}
+	}
+
+	//Insert the lines in the second string to the first string
+
+	size_t indexOfString1 = 0;
+	size_t indexOfString2 = 0;
+	for (size_t i = 0; i < string2Lines; i++)
+	{
+		bool foundNewLineCharacter = false;
+
+		//Find the index in the first string to insert
+		while (indexOfString1 < output.size())
+		{
+			if (output[indexOfString1] == L'\n')
+			{
+				foundNewLineCharacter = true;
+				output.erase(indexOfString1, 1);
+				break;
+			}
+			indexOfString1++;
+		}
+
+		//Insert characters in second string up until the end or until a new line character
+		while (indexOfString2 < string2.size())
+		{
+			if (string2[indexOfString2] == L'\n')
+			{
+				foundNewLineCharacter = true;
+				indexOfString2++;
+				break;
+			}
+			output.insert(indexOfString1, 1, string2[indexOfString2]);
+			indexOfString1++;
+			indexOfString2++;
+		}
+
+		if (foundNewLineCharacter)
+		{
+			output.insert(indexOfString1, 1, L'\n');
+			indexOfString1++;
+		}
+	}
+
+	return output;
 }

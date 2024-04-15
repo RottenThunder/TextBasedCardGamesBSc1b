@@ -40,169 +40,169 @@ std::wstring Card::GetCardAsString()
 	case 1:
 		for (int i = 0; i < output.size(); i++)
 		{
-			if (output[i] == L'0')
+			if (output[i] == L'B')
 				output[i] = L'A';
-			else if (output[i] == L'1')
+			else if (output[i] == L'C')
 				output[i] = L' ';
-			else if (output[i] == L'2')
+			else if (output[i] == L'D')
 				output[i] = L'A';
-			else if (output[i] == L'3')
+			else if (output[i] == L'E')
 				output[i] = L' ';
 		}
 		break;
 	case 2:
 		for (int i = 0; i < output.size(); i++)
 		{
-			if (output[i] == L'0')
+			if (output[i] == L'B')
 				output[i] = L'2';
-			else if (output[i] == L'1')
+			else if (output[i] == L'C')
 				output[i] = L' ';
-			else if (output[i] == L'2')
+			else if (output[i] == L'D')
 				output[i] = L'2';
-			else if (output[i] == L'3')
+			else if (output[i] == L'E')
 				output[i] = L' ';
 		}
 		break;
 	case 3:
 		for (int i = 0; i < output.size(); i++)
 		{
-			if (output[i] == L'0')
+			if (output[i] == L'B')
 				output[i] = L'3';
-			else if (output[i] == L'1')
+			else if (output[i] == L'C')
 				output[i] = L' ';
-			else if (output[i] == L'2')
+			else if (output[i] == L'D')
 				output[i] = L'3';
-			else if (output[i] == L'3')
+			else if (output[i] == L'E')
 				output[i] = L' ';
 		}
 		break;
 	case 4:
 		for (int i = 0; i < output.size(); i++)
 		{
-			if (output[i] == L'0')
+			if (output[i] == L'B')
 				output[i] = L'4';
-			else if (output[i] == L'1')
+			else if (output[i] == L'C')
 				output[i] = L' ';
-			else if (output[i] == L'2')
+			else if (output[i] == L'D')
 				output[i] = L'4';
-			else if (output[i] == L'3')
+			else if (output[i] == L'E')
 				output[i] = L' ';
 		}
 		break;
 	case 5:
 		for (int i = 0; i < output.size(); i++)
 		{
-			if (output[i] == L'0')
+			if (output[i] == L'B')
 				output[i] = L'5';
-			else if (output[i] == L'1')
+			else if (output[i] == L'C')
 				output[i] = L' ';
-			else if (output[i] == L'2')
+			else if (output[i] == L'D')
 				output[i] = L'5';
-			else if (output[i] == L'3')
+			else if (output[i] == L'E')
 				output[i] = L' ';
 		}
 		break;
 	case 6:
 		for (int i = 0; i < output.size(); i++)
 		{
-			if (output[i] == L'0')
+			if (output[i] == L'B')
 				output[i] = L'6';
-			else if (output[i] == L'1')
+			else if (output[i] == L'C')
 				output[i] = L' ';
-			else if (output[i] == L'2')
+			else if (output[i] == L'D')
 				output[i] = L'6';
-			else if (output[i] == L'3')
+			else if (output[i] == L'E')
 				output[i] = L' ';
 		}
 		break;
 	case 7:
 		for (int i = 0; i < output.size(); i++)
 		{
-			if (output[i] == L'0')
+			if (output[i] == L'B')
 				output[i] = L'7';
-			else if (output[i] == L'1')
+			else if (output[i] == L'C')
 				output[i] = L' ';
-			else if (output[i] == L'2')
+			else if (output[i] == L'D')
 				output[i] = L'7';
-			else if (output[i] == L'3')
+			else if (output[i] == L'E')
 				output[i] = L' ';
 		}
 		break;
 	case 8:
 		for (int i = 0; i < output.size(); i++)
 		{
-			if (output[i] == L'0')
+			if (output[i] == L'B')
 				output[i] = L'8';
-			else if (output[i] == L'1')
+			else if (output[i] == L'C')
 				output[i] = L' ';
-			else if (output[i] == L'2')
+			else if (output[i] == L'D')
 				output[i] = L'8';
-			else if (output[i] == L'3')
+			else if (output[i] == L'E')
 				output[i] = L' ';
 		}
 		break;
 	case 9:
 		for (int i = 0; i < output.size(); i++)
 		{
-			if (output[i] == L'0')
+			if (output[i] == L'B')
 				output[i] = L'9';
-			else if (output[i] == L'1')
+			else if (output[i] == L'C')
 				output[i] = L' ';
-			else if (output[i] == L'2')
+			else if (output[i] == L'D')
 				output[i] = L'9';
-			else if (output[i] == L'3')
+			else if (output[i] == L'E')
 				output[i] = L' ';
 		}
 		break;
 	case 10:
 		for (int i = 0; i < output.size(); i++)
 		{
-			if (output[i] == L'0')
+			if (output[i] == L'B')
 				output[i] = L'1';
-			else if (output[i] == L'1')
+			else if (output[i] == L'C')
 				output[i] = L'0';
-			else if (output[i] == L'2')
+			else if (output[i] == L'D')
 				output[i] = L'0';
-			else if (output[i] == L'3')
+			else if (output[i] == L'E')
 				output[i] = L'1';
 		}
 		break;
 	case 11:
 		for (int i = 0; i < output.size(); i++)
 		{
-			if (output[i] == L'0')
+			if (output[i] == L'B')
 				output[i] = L'J';
-			else if (output[i] == L'1')
+			else if (output[i] == L'C')
 				output[i] = L' ';
-			else if (output[i] == L'2')
+			else if (output[i] == L'D')
 				output[i] = L'J';
-			else if (output[i] == L'3')
+			else if (output[i] == L'E')
 				output[i] = L' ';
 		}
 		break;
 	case 12:
 		for (int i = 0; i < output.size(); i++)
 		{
-			if (output[i] == L'0')
+			if (output[i] == L'B')
 				output[i] = L'Q';
-			else if (output[i] == L'1')
+			else if (output[i] == L'C')
 				output[i] = L' ';
-			else if (output[i] == L'2')
+			else if (output[i] == L'D')
 				output[i] = L'Q';
-			else if (output[i] == L'3')
+			else if (output[i] == L'E')
 				output[i] = L' ';
 		}
 		break;
 	case 13:
 		for (int i = 0; i < output.size(); i++)
 		{
-			if (output[i] == L'0')
+			if (output[i] == L'B')
 				output[i] = L'K';
-			else if (output[i] == L'1')
+			else if (output[i] == L'C')
 				output[i] = L' ';
-			else if (output[i] == L'2')
+			else if (output[i] == L'D')
 				output[i] = L'K';
-			else if (output[i] == L'3')
+			else if (output[i] == L'E')
 				output[i] = L' ';
 		}
 		break;

@@ -4,9 +4,13 @@ void Solitaire::PlayGame()
 {
 	GetInput(LR"(Baroness Solitaire
 
-		Rules: All Kings are taken out of the deck. Five cards are dealt in a row as the bases of the five piles in the tableau. The top cards of each pile are available for removal to the discard pile.
+		Rules: All Kings are taken out of the deck. Five cards are dealt in a row as the bases of the 5 piles
+		in the tableau. The top cards of each pile are available for removal to the discard pile.
 
-		The aim is to discard all the cards by removing any pairs of available cards that total 13. In this game, spot cards are taken at face value, Jacks are worth 11, Queens 12. So the following combinations of cards may be discarded:
+		The aim is to discard all the cards by removing any pairs of available cards that total 13.
+		In this game, spot cards are taken at face value, Jacks are worth 11, Queens 12.
+
+		So the following combinations of cards may be discarded:
 
 		Queen and Ace
 		Jack and 2
@@ -14,7 +18,14 @@ void Solitaire::PlayGame()
 		9 and 4
 		8 and 5
 		7 and 6
-		When all available discards have been made, five fresh cards are dealt, one onto each pile in the tableau either filling a space or covering the existing card. The new top cards are available for play and, once again, any combinations totalling 13 are moved to the discard pile. When the top card of a pile is discarded, the card beneath becomes immediately available. Play continues in this way until there are only three cards left in hand; these are used as grace cards, being added to the end of the tableau, face up and side by side, and are available for play.
+
+		When all available discards have been made, five fresh cards are dealt,
+		one onto each pile in the tableau either filling a space or covering the existing card.
+		The new top cards are available for play and, once again, any combinations totalling 13
+		are moved to the discard pile. When the top card of a pile is discarded, the card beneath
+		becomes immediately available. Play continues in this way until there are only three cards
+		left in hand; these are used as grace cards, being added to the end of the tableau,
+		face up and side by side, and are available for play.
 
 		The game is out when all cards have been discarded.)");
 
@@ -40,7 +51,7 @@ void Solitaire::PlayGame()
 	for (int i = 0; i < 5; i++)
 		Piles[i].PlaceTop(mainDeck.Draw());
 
-	//Figure out whether there is a pair
+	//Renew the available cards
 
 	std::vector<Card> availableCards;
 	availableCards.resize(5);
@@ -52,11 +63,14 @@ void Solitaire::PlayGame()
 
 	//Illustrate cards
 
-	std::wstring decksAsString = AppendStringsOnSamePrintLine(LayoutDeckAsString(Piles[0]), LayoutDeckAsString(Piles[1]));
-	decksAsString = AppendStringsOnSamePrintLine(decksAsString, LayoutDeckAsString(Piles[2]));
-	decksAsString = AppendStringsOnSamePrintLine(decksAsString, LayoutDeckAsString(Piles[3]));
-	decksAsString = AppendStringsOnSamePrintLine(decksAsString, LayoutDeckAsString(Piles[4]));
-	std::wcout << decksAsString << std::endl;
+	std::wcout << s_SolitaireTableauHeader << std::endl;
+	std::wstring tableauAsString = AppendStringsOnSamePrintLine(DeckAsString(mainDeck.Size()), BlankCardSpace());
+	tableauAsString = AppendStringsOnSamePrintLine(tableauAsString, LayoutDeckAsString(Piles[0]));
+	tableauAsString = AppendStringsOnSamePrintLine(tableauAsString, LayoutDeckAsString(Piles[1]));
+	tableauAsString = AppendStringsOnSamePrintLine(tableauAsString, LayoutDeckAsString(Piles[2]));
+	tableauAsString = AppendStringsOnSamePrintLine(tableauAsString, LayoutDeckAsString(Piles[3]));
+	tableauAsString = AppendStringsOnSamePrintLine(tableauAsString, LayoutDeckAsString(Piles[4]));
+	std::wcout << tableauAsString << std::endl;
 
 	//Keep the play loop going unless there is no available actions such as drawing or discarding
 
@@ -65,8 +79,6 @@ void Solitaire::PlayGame()
 	while (hasAValidAction)
 	{
 		//Play Loop
-
-		std::wcout << L"Cards Left In Deck: " << mainDeck.Size() << std::endl;
 
 		//Prompt player to choose which 2 columns (1-5) they think are a pair and also give them the prompt to draw 5 new cards
 
@@ -78,7 +90,7 @@ void Solitaire::PlayGame()
 			secondColumn = UINT64_MAX;
 			while (firstColumn == UINT64_MAX)
 			{
-				GetInput(L"Choose First Column (1-5) (6 to draw 5 new cards): ");
+				GetInput(L"Choose First Column (1-5) (D to draw 5 new cards):");
 				if (s_Input == L"1")
 					firstColumn = 0;
 				else if (s_Input == L"2")
@@ -89,7 +101,7 @@ void Solitaire::PlayGame()
 					firstColumn = 3;
 				else if (s_Input == L"5")
 					firstColumn = 4;
-				else if (s_Input == L"6")
+				else if (s_Input == L"D" || s_Input == L"d")
 					firstColumn = 5;
 				else
 					std::wcout << L"Invalid Input" << std::endl;
@@ -139,7 +151,7 @@ void Solitaire::PlayGame()
 			}
 		}
 
-		//Figure out whether there is a pair
+		//Renew the available cards
 
 		availableCards[0] = Piles[0].PeekTop();
 		availableCards[1] = Piles[1].PeekTop();
@@ -149,11 +161,14 @@ void Solitaire::PlayGame()
 
 		//Illustrate cards
 
-		decksAsString = AppendStringsOnSamePrintLine(LayoutDeckAsString(Piles[0]), LayoutDeckAsString(Piles[1]));
-		decksAsString = AppendStringsOnSamePrintLine(decksAsString, LayoutDeckAsString(Piles[2]));
-		decksAsString = AppendStringsOnSamePrintLine(decksAsString, LayoutDeckAsString(Piles[3]));
-		decksAsString = AppendStringsOnSamePrintLine(decksAsString, LayoutDeckAsString(Piles[4]));
-		std::wcout << decksAsString << std::endl;
+		std::wcout << s_SolitaireTableauHeader << std::endl;
+		tableauAsString = AppendStringsOnSamePrintLine(DeckAsString(mainDeck.Size()), BlankCardSpace());
+		tableauAsString = AppendStringsOnSamePrintLine(tableauAsString, LayoutDeckAsString(Piles[0]));
+		tableauAsString = AppendStringsOnSamePrintLine(tableauAsString, LayoutDeckAsString(Piles[1]));
+		tableauAsString = AppendStringsOnSamePrintLine(tableauAsString, LayoutDeckAsString(Piles[2]));
+		tableauAsString = AppendStringsOnSamePrintLine(tableauAsString, LayoutDeckAsString(Piles[3]));
+		tableauAsString = AppendStringsOnSamePrintLine(tableauAsString, LayoutDeckAsString(Piles[4]));
+		std::wcout << tableauAsString << std::endl;
 
 		//Keep the play loop going unless there is no available actions such as drawing or discarding
 
@@ -182,6 +197,8 @@ std::wstring Solitaire::LayoutDeckAsString(Deck& deck)
 			output.append(deck[j].GetCardAsString());
 		else
 		{
+			//Start from the previous cards first character + 2 lines
+
 			std::wstring card = deck[j].GetCardAsString();
 			size_t replaceIndex = i * 16;
 			size_t k = 0;
@@ -198,15 +215,7 @@ std::wstring Solitaire::LayoutDeckAsString(Deck& deck)
 	}
 
 	if (deck.Size() == 0)
-	{
-		Card dummyCard;
-		output = dummyCard.GetCardAsString();
-		for (size_t i = 0; i < output.size(); i++)
-		{
-			if (output[i] != L'\n')
-				output[i] = L' ';
-		}
-	}
+		output = BlankCardSpace();
 
 	return output;
 }
@@ -214,6 +223,8 @@ std::wstring Solitaire::LayoutDeckAsString(Deck& deck)
 std::wstring Solitaire::AppendStringsOnSamePrintLine(const std::wstring& string1, const std::wstring& string2)
 {
 	std::wstring output = string1;
+
+	//Found out the amount of lines and the most amount of characters on 1 line in the first string
 
 	size_t string1Lines = 1;
 	size_t string1MostCharactersOnLine = 0;
@@ -235,6 +246,8 @@ std::wstring Solitaire::AppendStringsOnSamePrintLine(const std::wstring& string1
 	if (string1.size() == 0)
 		string1Lines = 0;
 
+	//Found out the amount of lines in the second string
+
 	size_t string2Lines = 1;
 	for (size_t i = 0; i < string2.size(); i++)
 	{
@@ -244,11 +257,15 @@ std::wstring Solitaire::AppendStringsOnSamePrintLine(const std::wstring& string1
 	if (string2.size() == 0)
 		string2Lines = 0;
 
+	//Add extra lines to the first string if the second string has more lines
+
 	if (string2Lines > string1Lines)
 	{
 		output.append(string2Lines - string1Lines, L'\n');
 		string1Lines = string2Lines;
 	}
+
+	//Add extra spaces to the end of lines in the first string to make each line have the same amount of characters 
 
 	for (size_t i = 0; i < string1Lines; i++)
 	{
@@ -261,6 +278,8 @@ std::wstring Solitaire::AppendStringsOnSamePrintLine(const std::wstring& string1
 				output.insert(index, 1, L' ');
 		}
 	}
+
+	//Insert the lines in the second string to the first string
 
 	size_t indexOfString1 = 0;
 	size_t indexOfString2 = 0;
@@ -301,6 +320,186 @@ std::wstring Solitaire::AppendStringsOnSamePrintLine(const std::wstring& string1
 		}
 	}
 
+	return output;
+}
+
+std::wstring Solitaire::DeckAsString(size_t size)
+{
+	std::wstring output = s_TemplateCard;
+
+	for (int i = 0; i < output.size(); i++)
+	{
+		if (output[i] == L'N' || output[i] == L'D' || output[i] == L'E')
+			output[i] = L' ';
+	}
+
+	size_t onesNumber = size % 10;
+	size_t tensNumber = (size / 10) % 10;
+
+	switch (tensNumber)
+	{
+	case 0:
+		for (int i = 0; i < output.size(); i++)
+		{
+			if (output[i] == L'B')
+				output[i] = L'0';
+		}
+		break;
+	case 1:
+		for (int i = 0; i < output.size(); i++)
+		{
+			if (output[i] == L'B')
+				output[i] = L'1';
+		}
+		break;
+	case 2:
+		for (int i = 0; i < output.size(); i++)
+		{
+			if (output[i] == L'B')
+				output[i] = L'2';
+		}
+		break;
+	case 3:
+		for (int i = 0; i < output.size(); i++)
+		{
+			if (output[i] == L'B')
+				output[i] = L'3';
+		}
+		break;
+	case 4:
+		for (int i = 0; i < output.size(); i++)
+		{
+			if (output[i] == L'B')
+				output[i] = L'4';
+		}
+		break;
+	case 5:
+		for (int i = 0; i < output.size(); i++)
+		{
+			if (output[i] == L'B')
+				output[i] = L'5';
+		}
+		break;
+	case 6:
+		for (int i = 0; i < output.size(); i++)
+		{
+			if (output[i] == L'B')
+				output[i] = L'6';
+		}
+		break;
+	case 7:
+		for (int i = 0; i < output.size(); i++)
+		{
+			if (output[i] == L'B')
+				output[i] = L'7';
+		}
+		break;
+	case 8:
+		for (int i = 0; i < output.size(); i++)
+		{
+			if (output[i] == L'B')
+				output[i] = L'8';
+		}
+		break;
+	case 9:
+		for (int i = 0; i < output.size(); i++)
+		{
+			if (output[i] == L'B')
+				output[i] = L'9';
+		}
+		break;
+	default:
+		break;
+	}
+
+	switch (onesNumber)
+	{
+	case 0:
+		for (int i = 0; i < output.size(); i++)
+		{
+			if (output[i] == L'C')
+				output[i] = L'0';
+		}
+		break;
+	case 1:
+		for (int i = 0; i < output.size(); i++)
+		{
+			if (output[i] == L'C')
+				output[i] = L'1';
+		}
+		break;
+	case 2:
+		for (int i = 0; i < output.size(); i++)
+		{
+			if (output[i] == L'C')
+				output[i] = L'2';
+		}
+		break;
+	case 3:
+		for (int i = 0; i < output.size(); i++)
+		{
+			if (output[i] == L'C')
+				output[i] = L'3';
+		}
+		break;
+	case 4:
+		for (int i = 0; i < output.size(); i++)
+		{
+			if (output[i] == L'C')
+				output[i] = L'4';
+		}
+		break;
+	case 5:
+		for (int i = 0; i < output.size(); i++)
+		{
+			if (output[i] == L'C')
+				output[i] = L'5';
+		}
+		break;
+	case 6:
+		for (int i = 0; i < output.size(); i++)
+		{
+			if (output[i] == L'C')
+				output[i] = L'6';
+		}
+		break;
+	case 7:
+		for (int i = 0; i < output.size(); i++)
+		{
+			if (output[i] == L'C')
+				output[i] = L'7';
+		}
+		break;
+	case 8:
+		for (int i = 0; i < output.size(); i++)
+		{
+			if (output[i] == L'C')
+				output[i] = L'8';
+		}
+		break;
+	case 9:
+		for (int i = 0; i < output.size(); i++)
+		{
+			if (output[i] == L'C')
+				output[i] = L'9';
+		}
+		break;
+	default:
+		break;
+	}
+
+	return output;
+}
+
+std::wstring Solitaire::BlankCardSpace()
+{
+	Card dummyCard;
+	std::wstring output = dummyCard.GetCardAsString();
+	for (size_t i = 0; i < output.size(); i++)
+	{
+		if (output[i] != L'\n')
+			output[i] = L' ';
+	}
 	return output;
 }
 
